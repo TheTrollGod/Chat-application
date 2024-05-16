@@ -13,10 +13,11 @@
 Client::Client(const std::string& ip, int port) : ip(ip), port(port), clientSocket(-1) {}
 
 
-void Client::connectToServer() {
+void Client::connectToServer(int& thrown_error) {
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if(clientSocket < 0) {
         std::cerr << "Error creating socket" << std::endl;
+        thrown_error = 1;
         return;
     }
 
@@ -29,10 +30,13 @@ void Client::connectToServer() {
 
    if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
     std::cerr << "Error connecting to server" << std::endl;
+    thrown_error = 2;
     return;
    }
-
+    
+    thrown_error = 0;
    std::cout << "Connected to remote server\n" << ip << ":" << port << std::endl;
+   
 }
 
 

@@ -6,7 +6,7 @@
 class Client {
     public:
         Client(const std::string& ip, int port);
-        void connectToServer();
+        void connectToServer(int& thrown_error);
         void sendMessage(const std::string& sender, const std::string& content);
         void receiveMessages();
 

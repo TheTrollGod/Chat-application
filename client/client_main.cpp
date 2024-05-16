@@ -15,8 +15,11 @@ void receiveMessages(Client& client) {
 
 int main() {
     Client client("127.0.0.1", 54000);
-    client.connectToServer();
-
+    int thrown_error = 0;
+    client.connectToServer(thrown_error);
+    if (thrown_error != 0) {
+        return 1;
+    }
     std::thread receiveThread(receiveMessages, std::ref(client));
 
     //setup username
