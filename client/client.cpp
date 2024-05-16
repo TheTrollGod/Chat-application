@@ -1,13 +1,18 @@
 #include "client.h"
 #include "../common/message.h"
 #include <iostream>
+#include <cstring>
+
+#ifdef _WIN32
+#include <windows.h>
+#include <winsock2.h>
+#else
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <arpa/inet.h>
 #include <unistd.h>
-#include <cstring>
-
+#include <arpa/inet.h>
+#endif
 
 //initilizes the client
 Client::Client(const std::string& ip, int port) : ip(ip), port(port), clientSocket(-1) {}
@@ -55,12 +60,19 @@ void Client::sendMessage(const std::string& sender, const std::string& content) 
 void Client::receiveMessages(){
     char buffer[1024];
     while(true) {
-        ssize_t bytesRecived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
-        if (bytesRecived <= 0) {
+        ssize_t bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+        #ifdef _WIN32
+        if (bytesReceived <= 0) {
+            closesocket(clientSocket); // Use closesocket instead of close
+            return;
+        }
+        #else
+        if (bytesReceived <= 0) {
             close(clientSocket);
             return;
         }
-        buffer[bytesRecived] = '\0';
+        #endif
+        buffer[bytesReceived] = '\0';
         Message msg = Message::fromString(buffer);
         std::cout << "Received message from " << msg.sender << ": " << msg.content << std::endl;
     }
