@@ -14,7 +14,10 @@ void receiveMessages(Client& client) {
 }
 
 int main() {
-    Client client("127.0.0.1", 54000);
+    std::string remote_server; 
+    std::cout << "What is the address of the chat server?" << std::endl;
+    std::getline(std::cin, remote_server);
+    Client client(remote_server, 54000);
     int thrown_error = 0;
     client.connectToServer(thrown_error);
     if (thrown_error != 0) {
