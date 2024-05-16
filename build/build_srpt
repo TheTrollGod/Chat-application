@@ -1,0 +1,62 @@
+#!/bin/bash
+
+usage() {
+    cat <<HELP_USAGE
+    Usage: build_srpt [option]
+    Builds the executable server and client files for development
+
+    -a          compiles both server and client files
+    -c          compiles only the client file
+    -s          compiles only the server file
+
+HELP_USAGE
+    exit 0
+}
+compile_client() {
+    cd ..
+    $(g++ -o build/client client/client_main.cpp client/client.cpp common/message.cpp)
+    chmod +x client
+}
+compile_server() {
+    cd ..
+    $(g++ -o build/server server/server_main.cpp server/server.cpp common/message.cpp)
+    chmod +x server
+}
+
+if [ $# -lt 1 ]
+then
+    usage
+    exit 1
+fi
+
+if [[ "$@" == "--help" || "$@" == "-h" ]]
+then
+    usage
+    exit 0
+fi
+
+while [[ $# -gt 0 ]]
+do
+    case "$1" in
+        -a)
+            compile_client
+            compile_server
+            shift
+            ;;
+        -c)
+            compile_client
+            shift
+            ;;
+        -s)
+            compile_server
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+    
