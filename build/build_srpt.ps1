@@ -14,13 +14,13 @@ function usage {
 # Define compile_client function
 function compile_client {
     Set-Location ..
-    & g++ -o build\client client\client_main.cpp client\client.cpp common\message.cpp
+    & g++ -o build\client client\client_main.cpp client\client.cpp common\message.cpp -lws2_32
 }
 
 # Define compile_server function
 function compile_server {
     Set-Location ..
-    & g++ -o build\server server\server_main.cpp server\server.cpp common\message.cpp
+    & g++ -o build\server server\server_main.cpp server\server.cpp common\message.cpp -lws2_32
 }
 
 # Check if no arguments are provided

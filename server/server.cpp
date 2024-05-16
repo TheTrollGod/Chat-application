@@ -7,8 +7,8 @@
 #include <string> // Include for std::string
 
 #ifdef _WIN32
-#include <windows.h>
 #include <winsock2.h>
+#include <windows.h>
 #else
 #include <sys/types.h>
 #include <sys/socket.h>
