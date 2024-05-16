@@ -87,10 +87,17 @@ void Server::handleClient(int clientSocket) {
     char buffer[1024];
     while (true) {
         ssize_t bytesReceived = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);
+        #ifdef _WIN32
+        if (bytesReceived <= 0) {
+            closesocket(clientSocket); // Use closesocket instead of close
+            return;
+        }
+        #else
         if (bytesReceived <= 0) {
             close(clientSocket);
             return;
         }
+        #endif
         buffer[bytesReceived] = '\0';
         // Convert received message in buffer into a Message object
         Message msg = Message::fromString(buffer);
