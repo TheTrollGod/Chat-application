@@ -7,6 +7,7 @@
 #include <string> // Include for std::string
 
 #ifdef _WIN32
+#include <windows.h>
 #include <winsock2.h>
 #else
 #include <sys/types.h>
